@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:note_app/Constants.dart';
+import 'package:note_app/cubits/cubit/add_notes_cubit.dart';
 import 'package:note_app/views/widgts/custom_bottom.dart';
 import 'package:note_app/views/widgts/custom_text_field.dart';
 
@@ -8,12 +11,26 @@ class AddNoteBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(
+    return Padding(
+      padding: const EdgeInsets.symmetric(
         horizontal: 16,
       ),
       child: SingleChildScrollView(
-        child: _AddNoteFormState(),
+        child: BlocConsumer<AddNotesCubit, AddNotesState>(
+          listener: (context, state) {
+            if (state is AddNotesFailure) {
+              print('failure ${state.errMessage}');
+            }
+            if (state is AddNotesSuccess) {
+              Navigator.pop(context);
+            }
+          },
+          builder: (context, state) {
+            return ModalProgressHUD(
+                inAsyncCall: state is AddNotesLoading ? true : false,
+                child: const _AddNoteFormState());
+          },
+        ),
       ),
     );
   }
@@ -68,9 +85,7 @@ class _AddNoteFormStateState extends State<_AddNoteFormState> {
                 formKey.currentState!.save();
               } else {
                 autovalidateMode = AutovalidateMode.always;
-                setState(() {
-                  
-                });
+                setState(() {});
               }
             },
           ),
