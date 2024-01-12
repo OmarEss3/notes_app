@@ -12,10 +12,10 @@ class AddNoteFormState extends StatefulWidget {
   });
 
   @override
-  State<AddNoteFormState> createState() => _AddNoteFormStateState();
+  State<AddNoteFormState> createState() => AddNoteFormStateState();
 }
 
-class _AddNoteFormStateState extends State<AddNoteFormState> {
+class AddNoteFormStateState extends State<AddNoteFormState> {
   final GlobalKey<FormState> formKey = GlobalKey();
   String? title, subTitle;
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
@@ -42,7 +42,7 @@ class _AddNoteFormStateState extends State<AddNoteFormState> {
           CustomTextField(
             hint: 'Content',
             onSaved: (value) {
-              title = value;
+              subTitle = value;
             },
             maxLines: 5,
           ),
